@@ -55,14 +55,14 @@ void LuaProtoplugJuceAudioProcessor::setParameter (int index, float newValue)
 const String LuaProtoplugJuceAudioProcessor::getParameterName (int index)
 {
 	if (index >= NPARAMS)
-		return String::empty;
+		return String();
 	return luli->getParameterName(index);
 }
 
 const String LuaProtoplugJuceAudioProcessor::getParameterText (int index)
 {
 	if (index >= NPARAMS)
-		return String::empty;
+		return String();
 	String s = luli->getParameterText(index);
 	if (s.isEmpty())
 		s = String(params[index], 4);
@@ -145,12 +145,12 @@ void LuaProtoplugJuceAudioProcessor::setStateInformation (const void* data, int 
 	int sz_script = *pi++;				// get size of code
 	char *pc = (char*)(pi);
 	luli->code = pc;					// get code
-	luli->saveData = String::empty;
+	luli->saveData = String();
 	if (ProtoplugDir::Instance()->found)
 		luli->compile();
 	else
 		luli->addToLog("could not compile script because the ProtoplugFiles directory is missing or incomplete");
-	
+
 	pc += sz_script;
 	pi = (int*)pc;
 	int sz_user = *pi++;				// get size of lua saveable string

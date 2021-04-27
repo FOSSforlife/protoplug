@@ -48,7 +48,7 @@ LuaLink::LuaLink(LuaProtoplugJuceAudioProcessor *_pfx)
 	guiThreadRunning = workable = iLuaLoaded = 0;
 	pfx = _pfx;
 	customGui = 0;
-	
+
 	libFolder = ProtoplugDir::Instance()->getScriptsDir().getFullPathName();
 	code = File(libFolder).getChildFile("default.lua").loadFileAsString();
 	// unfortunately we can't know whether the host will call setStateInformation or not,
@@ -177,7 +177,7 @@ void LuaLink::compile() {
 		}
 	} else
 		ls->pop( 1); // pop nil
-	
+
 	// bask in the glory of success
 	workable = 1;
 
@@ -247,7 +247,7 @@ void LuaLink::stackDump () {
 
 bool LuaLink::startOverride(const char *fname)
 {
-	if (!workable) 
+	if (!workable)
 		return false;
 	ls->getglobal( fname);
 	if (!ls->isfunction( -1)) {
@@ -319,9 +319,9 @@ String LuaLink::callStringOverride(const char *fname, ...)
 	int numArgs = startVarargOverride(fname, args);
     va_end(args);
 	if (numArgs<0)
-		return String::empty; // state or function does not exist
+		return String(); // state or function does not exist
 	if (safepcall (fname, numArgs, 1, 0))
-		return String::empty; // function crashed
+		return String(); // function crashed
 	return safetostring();
 }
 
@@ -354,7 +354,7 @@ String LuaLink::safetostring()
 {
 	if (!ls->isstring(-1)) {
 		ls->settop(0);
-		return String::empty; // there is no string
+		return String(); // there is no string
 	}
 	String ret = ls->tostring(-1);
 	ls->settop(0);
@@ -364,7 +364,7 @@ String LuaLink::safetostring()
 double LuaLink::getTailLengthSeconds()
 {
 	const GenericScopedLock<CriticalSection> lok(cs);
-	if (!workable) 
+	if (!workable)
 		return 0.0;
 
 	ls->getglobal( "plugin_getTailLengthSeconds");
@@ -445,7 +445,7 @@ void LuaLink::preClose ()
 { callVoidOverride("script_preClose", 0); }
 
 void LuaLink::paint (Graphics& g)
-{ 
+{
 	if (!callVoidOverride("gui_paint"	, LUA_TLIGHTUSERDATA, &g, 0))
 	{
 		g.fillAll();
@@ -457,9 +457,9 @@ void LuaLink::paint (Graphics& g)
 void LuaLink::resized ()
 { callVoidOverride("gui_resized", 0); }
 
-	
+
 void LuaLink::mouseOverride (const char *fname, const MouseEvent& event)
-{ 
+{
 	const GenericScopedLock<CriticalSection> lok(cs);
 	if (startOverride(fname)) {
 		exMouseEvent exEvent = MouseEvent2Struct(event);
@@ -480,7 +480,7 @@ void LuaLink::mouseEnter (const MouseEvent& event)
 
 void LuaLink::mouseExit (const MouseEvent& event)
 { mouseOverride ("gui_mouseExit", event); }
-	
+
 void LuaLink::mouseDown (const MouseEvent& event)
 { mouseOverride ("gui_mouseDown", event); }
 
@@ -521,7 +521,7 @@ bool LuaLink::keyPressed (const KeyPress &key, Component *originatingComponent)
 }
 
 bool LuaLink::keyStateChanged (bool isKeyDown, Component *originatingComponent)
-{ 
+{
 	const GenericScopedLock<CriticalSection> lok(cs);
 	if (startOverride("gui_keyStateChanged")) {
 		ls->pushboolean(isKeyDown);

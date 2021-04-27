@@ -24,7 +24,7 @@ ProtoWindow::ProtoWindow (Component *parent, LuaProtoplugJuceAudioProcessor* own
 	activePanelComponent(0),
 	paramDock(&paramPanel, "protoplug parameters", ownerFilter),
 	guiDock(&guiPanel, "protoplug GUI", ownerFilter),
-	tab1("code"), tab2("params"), tab3("gui"), 
+	tab1("code"), tab2("params"), tab3("gui"),
 	bottomPane(this)
 {
 	dirty = false;
@@ -58,10 +58,10 @@ ProtoWindow::ProtoWindow (Component *parent, LuaProtoplugJuceAudioProcessor* own
 	activePanel = processor->lastUIPanel;
 	panels[activePanel]->setVisible (true);
 	activePanelComponent = panels[activePanel];
-	
+
 	// log text area
 	addAndMakeVisible(&bottomPane);
-	
+
 	// splitter						item	min		max		default
     horizontalLayout.setItemLayout (0,		-0.1,	-1.0,	processor->lastUISplit-20);		// top (code editor)
     horizontalLayout.setItemLayout (1,		8,		8,		8);										// mid (splitter)
@@ -81,7 +81,7 @@ ProtoWindow::ProtoWindow (Component *parent, LuaProtoplugJuceAudioProcessor* own
 	hackTimer = 0;
     startTimer (50);
 	addKeyListener(commMgr.getKeyMappings());
-	
+
 	commMgr.registerAllCommandsForTarget(this);
 	editor.getDocument().addListener(this);
 	readPrefs();
@@ -108,7 +108,7 @@ void ProtoWindow::readTheme(File f)
 	if (!f.exists())
 		return;
 	editor.setFont(Font(Font::getDefaultMonospacedFontName(), 14, 0));
-	ScopedPointer<XmlElement> root (XmlDocument(f).getDocumentElement());
+	std::unique_ptr<juce::XmlElement> root (XmlDocument(f).getDocumentElement());
 	if (!root)
 		return;
     CodeEditorComponent::ColourScheme cs = tok.getDefaultColourScheme();
@@ -126,7 +126,7 @@ void ProtoWindow::readTheme(File f)
 	int i;
 	String s;
 	Colour c;
-	
+
 	forEachXmlChildElement (*root, e)
 	{
 		if (e->hasTagName ("color"))
@@ -148,7 +148,7 @@ void ProtoWindow::readTheme(File f)
 				editor.setColour(CaretComponent::caretColourId, c);
 			} else
 				cs.set(s,c);
-		} 
+		}
 		else if (e->hasTagName ("font"))
 		{
 			i = e->getIntAttribute("priority", INT_MAX-1);
@@ -181,10 +181,10 @@ void ProtoWindow::readPrefs()
 	File f = ProtoplugDir::Instance()->getDir().getChildFile("prefs.xml");
 	if (!f.exists())
 		return;
-	XmlElement *e = XmlDocument(f).getDocumentElement();
+	std::unique_ptr<juce::XmlElement> e = XmlDocument(f).getDocumentElement();
 	if (e) {
 		commMgr.getKeyMappings()->restoreFromXml(*e);
-		delete e;
+		// delete e;
 	}
 	/*	// writePrefs()
 	XmlElement *e = commMgr.getKeyMappings()->createXml(false);
@@ -208,7 +208,7 @@ void ProtoWindow::paint (Graphics& g)
 void ProtoWindow::resized()
 {
 	int menuHeight = 20;
-	
+
     Component* hcomps[] = { activePanelComponent, horizontalDividerBar, &bottomPane };
     horizontalLayout.layOutComponents (hcomps, 3,
                                         0, menuHeight, getWidth(), getHeight() - menuHeight,
@@ -319,9 +319,9 @@ void ProtoWindow::menuItemSelected (int menuItemID, int /*topLevelMenuIndex*/)
 
 void ProtoWindow::getAllCommands (Array <CommandID>& commands)
 {
-	const CommandID ids[] = {cmdCompile, cmdStackDump, cmdLiveMode, cmdFindSelected, cmdFindNext, 
-							cmdFindPrev, cmdShow0, cmdShow1, cmdShow2, cmdShowNext, cmdShowPrev, 
-							cmdOpen, cmdSaveAs, cmdOpenProto, cmdPopout, cmdAlwaysOnTop, cmdWebsite, 
+	const CommandID ids[] = {cmdCompile, cmdStackDump, cmdLiveMode, cmdFindSelected, cmdFindNext,
+							cmdFindPrev, cmdShow0, cmdShow1, cmdShow2, cmdShowNext, cmdShowPrev,
+							cmdOpen, cmdSaveAs, cmdOpenProto, cmdPopout, cmdAlwaysOnTop, cmdWebsite,
 							cmdAPI, cmdAbout, cmdUndo, cmdRedo, cmdCut, cmdCopy, cmdPaste};
 	commands.addArray (ids, numElementsInArray (ids));
 }
@@ -422,7 +422,7 @@ void ProtoWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
 		result.setActive(activePanelComponent==&editor && !searchTerm.isEmpty());
 		result.addDefaultKeypress (KeyPress::F3Key, ModifierKeys::shiftModifier);
         break;
-		
+
 	case cmdUndo:
         result.setInfo ("Undo", "Undo", cat, 0);
 		result.setActive(activePanelComponent==&editor && editor.getDocument().getUndoManager().canUndo());
@@ -447,7 +447,7 @@ void ProtoWindow::getCommandInfo (CommandID commandID, ApplicationCommandInfo& r
         result.setInfo ("Paste", "Paste", cat, 0);
 		result.addDefaultKeypress ('v', ModifierKeys::commandModifier);
         break;
-		
+
     default:
         break;
     };

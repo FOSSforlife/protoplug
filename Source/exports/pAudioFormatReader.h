@@ -14,9 +14,9 @@
 #include "../ProtoplugDir.h"
 
 PROTO_API pAudioFormatReader AudioFormatReader_new(const char *filename)
-{ 
+{
 	File f = ProtoplugDir::Instance()->getDir().getChildFile(filename);
-	if (f == File::nonexistent)
+	if (!f.exists())
 		f = File(filename);
 	AudioFormatManager afm;
 	afm.registerBasicFormats();
