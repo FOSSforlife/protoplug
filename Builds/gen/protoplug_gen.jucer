@@ -8,7 +8,7 @@
               pluginProducesMidiOut="1" pluginSilenceInIsSilenceOut="0" pluginEditorRequiresKeys="1"
               pluginAUExportPrefix="protoplug_genAU" pluginRTASCategory=""
               aaxIdentifier="com.yourcompany.protoplug_gen" pluginAAXCategory="2"
-              jucerVersion="5.3.2" companyName="osar.fr" pluginAUMainType="'aumu'"
+              jucerVersion="5.4.7" companyName="osar.fr" pluginAUMainType="'aumu'"
               buildVST3="0" buildRTAS="0" buildAAX="0" pluginFormats="buildVST,buildAU"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn,pluginProducesMidiOut,pluginEditorRequiresKeys">
   <MAINGROUP id="Blif9d" name="protoplug_gen">
@@ -167,20 +167,22 @@
     </VS2017>
   </EXPORTFORMATS>
   <MODULES>
-    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0"/>
-    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0"/>
+    <MODULES id="juce_audio_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_audio_devices" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_audio_formats" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_audio_plugin_client" showAllCode="1" useLocalCopy="0"
+             useGlobalPath="1"/>
+    <MODULES id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULES id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
   </MODULES>
   <JUCEOPTIONS JUCE_QUICKTIME="disabled"/>
   <LIVE_SETTINGS>
     <WINDOWS/>
+    <LINUX/>
   </LIVE_SETTINGS>
 </JUCERPROJECT>
